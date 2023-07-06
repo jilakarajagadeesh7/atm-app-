@@ -1,7 +1,8 @@
-//This code represents an ATM program implemented in C. It prompts the user to enter their account number and PIN.
-//If the PIN is correct, it presents a menu of options for cash deposit, withdrawal, fund transfer, or account services.
-//The user's choice is then processed accordingly. The program also includes functionality to hide the password input and limit
-//the password length to four characters.
+//This code defines a function cashDeposit() that handles the process of cash deposit in an ATM system.
+//It prompts the user to enter an amount to deposit. If the amount is valid (between 100 and 100,000), it performs the deposit,
+//updates the account balance (not implemented in the given code), and records the transaction in a file called "transactions.txt". 
+//Finally, it displays a success message.
+
 #include <stdio.h>
 #include <stdlib.h>
 
