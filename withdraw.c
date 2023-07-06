@@ -1,3 +1,9 @@
+//This code defines a function cashWithdrawal() that handles the process of cash withdrawal in an ATM system. 
+//It prompts the user to enter an amount to withdraw and their PIN. 
+//If the amount is valid (between 100 and 10,000) and the PIN is entered correctly, it performs the withdrawal, updates the account 
+//balance(not implemented in the given code), and records the transaction in a file called "transactions.txt". Finally,
+//it displays a success message.
+
 #include <stdio.h>
 #include <stdlib.h>
 
