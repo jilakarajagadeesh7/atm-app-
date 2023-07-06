@@ -1,3 +1,8 @@
+//This code represents an ATM program implemented in C. It prompts the user to enter their account number and PIN.
+//If the PIN is correct, it presents a menu of options for cash deposit, withdrawal, fund transfer, or account services.
+//The user's choice is then processed accordingly. The program also includes functionality to hide the password input and limit
+//the password length to four characters.
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
