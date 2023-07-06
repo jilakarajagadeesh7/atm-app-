@@ -1,3 +1,8 @@
+//This code defines a function fundTransfer() that handles the process of transferring funds in an ATM system. 
+//It prompts the user to enter an amount to transfer, the recipient's account, and their PIN. If the amount is valid (positive) and
+// the PIN is entered correctly, it performs the fund transfer, updates the account balances (not implemented in the given code), 
+//and records the transaction in a file called "transactions.txt". Finally, it displays a success message.
+
 #include <stdio.h>
 #include <stdlib.h>
 
