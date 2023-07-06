@@ -1,3 +1,8 @@
+//This code defines a function statementRequest() that retrieves and displays the transaction statement from a file named "transactions.txt". 
+//It first attempts to open the file and checks for any errors. If the file is successfully opened, 
+//it reads each line of the file and prints it as part of the statement. Finally, it closes the file.
+
+
 #include <stdio.h>
 #include <stdlib.h>
 
