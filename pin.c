@@ -1,3 +1,7 @@
+//This code defines a function changePIN() that handles the process of changing the PIN in an ATM system.
+//It prompts the user to enter their old and new PIN. However, the code provided does not correctly validate the old or new PIN. 
+//It displays an error message regardless of the input. The logic for updating the PIN in the system is missing in the given code. 
+//Finally, it prints a success message regardless of the changes made.
 #include <stdio.h>
 
 void changePIN() {
