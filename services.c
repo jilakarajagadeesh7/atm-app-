@@ -1,3 +1,9 @@
+//This code defines a function accountServices() that presents a menu of account services to the user.
+//It prompts the user to enter their choice of service (balance inquiry, change PIN, or statement request) and performs the corresponding
+// action based on the selected option by calling the appropriate functions balanceInquiry(), changePIN(), or statementRequest().
+// If an invalid option is entered, it displays an error message.
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "sub.h"
