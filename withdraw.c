@@ -1,18 +1,15 @@
-//This code defines a function cashWithdrawal() that handles the process of cash withdrawal in an ATM system. 
-//It prompts the user to enter an amount to withdraw and their PIN. 
-//If the amount is valid (between 100 and 10,000) and the PIN is entered correctly, it performs the withdrawal, updates the account 
-//balance(not implemented in the given code), and records the transaction in a file called "transactions.txt". Finally,
-//it displays a success message.
-
+//This code defines a function cashWithdrawal() that allows a user to withdraw money from an account. 
+//It prompts the user to enter an amount between 100 and 10,000, their PIN, and an OTP if the amount exceeds 10,000. 
+//It performs basic validation and saves the transaction to a file named "transactions.txt".
 #include <stdio.h>
 #include <stdlib.h>
 
 void cashWithdrawal() {
     double amount;
-    int pin;
+    int pin, otp;
     FILE* file;
     
-    printf("enter the amount between 100 to 10000\n");
+    printf("Enter the amount between 100 to 10000\n");
 
     // Prompt for withdrawal amount
     printf("Enter the amount to withdraw: ");
@@ -29,6 +26,17 @@ void cashWithdrawal() {
     if (scanf("%d", &pin) != 1) {
         printf("Invalid PIN. Withdrawal failed.\n");
         return;
+    }
+
+    // Check if amount exceeds 10,000 and prompt for OTP
+    if (amount >=10000) {
+        printf("Enter OTP: ");
+        if (scanf("%d", &otp) != 1) {
+            printf("Invalid OTP. Withdrawal failed.\n");
+            return;
+        }
+        // Perform OTP verification logic here
+        // ...
     }
 
     // Perform the withdrawal and update account balance
