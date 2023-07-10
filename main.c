@@ -1,73 +1,37 @@
-//This code represents an ATM program implemented in C. It prompts the user to enter their account number and PIN.
-//If the PIN is correct, it presents a menu of options for cash deposit, withdrawal, fund transfer, or account services.
-//The user's choice is then processed accordingly. The program also includes functionality to hide the password input and limit
-//the password length to four characters.
+//This code represents a simple ATM program that allows users to perform various banking operations. 
+//It prompts the user for their account number and PIN, hides the PIN input with asterisks, validates the PIN, and presents a menu of options. 
+//Depending on the chosen option, it calls the respective function for cash deposit, cash withdrawal, fund transfer, or account services.
 
+//06/07/2023:divided the main .c file into several functtion .c files
+//07/07/2023:restricted negative values and alphabets while entering the account number and pin
+          //:fixed account number as 9 digits and i provide a valiadate pin in the code
+          //:while entering the pin number i displayed (*) instead of numbers in the output to provide pin security
+//10/07/2023:i add otp verificarion for the pin change if the user forgot his old pin 
+          //:and i added otp verification if the amoumt is more than or equal to 10000
+          
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <termios.h>
+#include <unistd.h>
 #include "sub.h"
 
-#ifdef _WIN32
-    #include <conio.h>
-#else
-    #include <termios.h>
-    #include <unistd.h>
-#endif
-
-#ifdef _WIN32
-    int getch() {
-        return _getch();
-    }
-#else
-    int getch() {
-        struct termios oldattr, newattr;
-        int ch;
-        tcgetattr(STDIN_FILENO, &oldattr);  // Get the current terminal attributes
-        newattr = oldattr;
-        newattr.c_lflag &= ~(ICANON | ECHO);  // Disable canonical mode and echoing
-        tcsetattr(STDIN_FILENO, TCSANOW, &newattr);  // Apply the new terminal attributes
-        ch = getchar();  // Read a single character
-        tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);  // Restore the original terminal attributes
-        return ch;
-    }
-#endif
-
-void hideInput(char *password) {
-    int i = 0;
-    while (1) {
-        char ch = getch();  // Read a single character without echoing
-        if (ch == '\n' || ch == '\r')
-            break;
-        if (ch == 127 && i > 0) {  // Handle backspace
-            putchar('\b');  // Move the cursor back by one position
-            putchar(' ');   // Overwrite the character with a space
-            putchar('\b');  // Move the cursor back again
-            i--;
-        } else if (i < 4 && ch != 127) {  // Limit the password length to 4 characters
-            putchar('*');  // Display '*' instead of the entered character
-            password[i] = ch;  // Store the entered character in the password array
-            i++;
-        }
-    }
-    password[i] = '\0';  // Add null terminator to the password string
-    printf("\n");
-}
-
-int isNumeric(const char *str) {
-    while (*str) {
-        if (*str < '0' || *str > '9')
-            return 0;
-        str++;
-    }
-    return 1;
+int getch() {
+    struct termios oldattr, newattr;
+    int ch;
+    tcgetattr(STDIN_FILENO, &oldattr);
+    newattr = oldattr;
+    newattr.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
+    ch = getchar();
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
+    return ch;
 }
 
 int main() {
     int option;
-    char password[5];
-    int attempts = 0;
-    int pinValidated = 0;  // Flag to track if PIN is validated or not
+    int accountNumber;
+    int validatePIN = 1234;  // Change this to your desired PIN
+    int pinNumber = 0;
 
     // Display menu options
     printf("Welcome to the ATM!\n");
@@ -76,62 +40,61 @@ int main() {
     printf("3. Fund Transfer\n");
     printf("4. Account Services\n");
     printf("5. Exit\n");
-    
-    // Prompt for account number
-    char accountNumber[10];
-    printf("Enter your account number: ");
-    fgets(accountNumber, sizeof(accountNumber), stdin);
-    accountNumber[strcspn(accountNumber, "\n")] = '\0';  // Remove trailing newline
 
-    // Validate account number
-    if (!isNumeric(accountNumber)) {
-        printf("Invalid account number. Please enter a valid numeric account number.\n");
+    // Prompt for account number
+    printf("Enter your account number (9 digits only): ");
+    scanf("%9d", &accountNumber);
+
+    // Consume the newline character from the input buffer
+    getchar();
+
+    // Check if the account number has 9 digits
+    if (accountNumber < 100000000 || accountNumber > 999999999) {
+        printf("Invalid account number. Access denied.\n");
         return 0;
     }
 
-    while (!pinValidated) {
-        // Prompt for PIN
-        printf("Enter your PIN: ");
-        hideInput(password);
+    // Prompt for PIN number
+    printf("Enter your PIN number: ");
 
-        // Validate PIN
-        if (strcmp(password, "1234") == 0) {
-            pinValidated = 1;
-        } else {
-            attempts++;
-            if (attempts == 3) {
-                printf("Attempts exceeded. Exiting...\n");
-                return 0;
-            }
-            printf("Incorrect PIN. Please try again.\n");
+    // Read PIN number character by character and display asterisks
+    int ch;
+    while ((ch = getch()) != '\n' && ch != EOF) {
+        if (ch >= '0' && ch <= '9') {
+            putchar('*');
+            pinNumber = pinNumber * 10 + (ch - '0');
         }
     }
 
-    // Prompt for user input
-    printf("Enter your option: ");
-    if (scanf("%d", &option) != 1) {
-        printf("Invalid option. Please try again.\n");
-        return 0;
-    }
+    printf("\n");
 
-    switch (option) {
-        case 1:
-            cashDeposit();
-            break;
-        case 2:
-            cashWithdrawal();
-            break;
-        case 3:
-            fundTransfer();
-            break;
-        case 4:
-            accountServices();
-            break;
-        case 5:
-            printf("Thank you for using the ATM. Goodbye!\n");
-            exit(0);
-        default:
-            printf("Invalid option. Please try again.\n");
+    // Validate the entered PIN
+    if (pinNumber == validatePIN) {
+        // Prompt for user input
+        printf("Enter your option: ");
+        scanf("%d", &option);
+
+        switch (option) {
+            case 1:
+                cashDeposit();
+                break;
+            case 2:
+                cashWithdrawal();
+                break;
+            case 3:
+                fundTransfer();
+                break;
+            case 4:
+                accountServices();
+                break;
+            case 5:
+                printf("Thank you for using the ATM. Goodbye!\n");
+                exit(0);
+            default:
+                printf("Invalid option. Please try again.\n");
+        }
+    } else {
+        printf("Invalid PIN. Access denied.\n");
     }
 
     return 0;
