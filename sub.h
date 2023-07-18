@@ -1,15 +1,11 @@
-//This code represents a header file sub.h that declares several function prototypes related to banking operations, 
-//including cashDeposit(), cashWithdrawal(), fundTransfer(), accountServices(), balanceInquiry(), changePIN(), and statementRequest().
+#ifndef SUB_H_INCLUDED
+#define SUB_H_INCLUDED
 
-#ifndef SUB_H
-#define SUB_H
-
-void cashDeposit();
-void cashWithdrawal();
-void fundTransfer();
-void accountServices();
-void balanceInquiry();
+void balanceInquiry(int *total_balance);
+void cashDeposit(int *balance);
+void cashWithdrawal(int *balance);
+void fundTransfer(int *balance);
 void changePIN();
 void statementRequest();
 
-#endif
+#endif // SUB_H_INCLUDED
