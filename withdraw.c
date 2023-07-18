@@ -1,46 +1,20 @@
-//This code defines a function cashWithdrawal() that allows a user to withdraw money from an account. 
-//It prompts the user to enter an amount between 100 and 10,000, their PIN, and an OTP if the amount exceeds 10,000. 
-//It performs basic validation and saves the transaction to a file named "transactions.txt".
 #include <stdio.h>
-#include <stdlib.h>
+#include "sub.h"
 
-void cashWithdrawal() {
+void cashWithdrawal(int *balance) {
     double amount;
-    int pin, otp;
-    FILE* file;
-    
-    printf("Enter the amount between 100 to 10000\n");
+    FILE *file;
 
-    // Prompt for withdrawal amount
     printf("Enter the amount to withdraw: ");
     scanf("%lf", &amount);
-
-    // Validate the amount (should be between 100 and 10,000)
-    if (amount < 100 || amount > 10000) {
+    // Validate the amount (should be positive and less than or equal to the account balance)
+    if (amount <= 0 || amount > *balance) {
         printf("Invalid amount. Withdrawal failed.\n");
         return;
     }
 
-    // Prompt for PIN
-    printf("Enter your PIN: ");
-    if (scanf("%d", &pin) != 1) {
-        printf("Invalid PIN. Withdrawal failed.\n");
-        return;
-    }
-
-    // Check if amount exceeds 10,000 and prompt for OTP
-    if (amount >=10000) {
-        printf("Enter OTP: ");
-        if (scanf("%d", &otp) != 1) {
-            printf("Invalid OTP. Withdrawal failed.\n");
-            return;
-        }
-        // Perform OTP verification logic here
-        // ...
-    }
-
     // Perform the withdrawal and update account balance
-    // Add your logic here
+    *balance -= (int)amount;
 
     // Save the transaction to a file
     file = fopen("transactions.txt", "a");
@@ -53,4 +27,7 @@ void cashWithdrawal() {
     fclose(file);
 
     printf("Withdrawal successful. Thank you!\n");
+
+    // Display the updated account balance
+    printf("Your updated account balance is: Rs%d\n", *balance);
 }
