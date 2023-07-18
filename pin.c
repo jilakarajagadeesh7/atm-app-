@@ -1,7 +1,3 @@
-//This code defines a function changePIN() that allows a user to change their PIN. 
-//It presents two options: changing the PIN with the old PIN or changing the PIN with the account number and OTP.
-//It prompts the user for the required information, performs validation checks, and updates the PIN accordingly if all checks pass.
-
 #include <stdio.h>
 #include <stdbool.h>
 
@@ -53,48 +49,41 @@ void changePIN() {
         // Add your PIN update logic here
         // ...
 
-        printf("PIN change successful. Thank you!\n");
+        // Update the PIN in the user_info.txt file
+        FILE* file = fopen("user_info.txt", "r");
+        FILE* tempFile = fopen("temp.txt", "w");
+        if (file == NULL || tempFile == NULL) {
+            printf("Error updating PIN. Please try again.\n");
+            return;
+        }
+
+        char name[50];
+        char phoneNumber[15];
+        int accountNumber, pinNumber;
+        bool pinUpdated = false;
+
+        while (fscanf(file, "%s %s %d %d", name, phoneNumber, &accountNumber, &pinNumber) != EOF) {
+            if (pinNumber == oldPIN) {
+                fprintf(tempFile, "%s %s %d %d\n", name, phoneNumber, accountNumber, newPIN);
+                pinUpdated = true;
+            } else {
+                fprintf(tempFile, "%s %s %d %d\n", name, phoneNumber, accountNumber, pinNumber);
+            }
+        }
+
+        fclose(file);
+        fclose(tempFile);
+
+        if (pinUpdated) {
+            remove("user_info.txt");
+            rename("temp.txt", "user_info.txt");
+            printf("PIN change successful. Thank you!\n");
+        } else {
+            remove("temp.txt");
+            printf("Invalid old PIN. PIN change failed.\n");
+        }
     } else if (option == 2) {
-        int accountNumber, newPIN, otp;
-
-        // Prompt for account number
-        printf("Enter your account number: ");
-        if (scanf("%d", &accountNumber) != 1 || !validatePositiveIntegerInput(accountNumber)) {
-            printf("Invalid account number. PIN change failed.\n");
-            return;
-        }
-
-        // Validate the account number
-        // Add your account number validation logic here
         // ...
-
-        // Generate and send OTP to registered mobile number
-        // Add your OTP generation and sending logic here
-        // ...
-
-        // Prompt for OTP
-        printf("Enter OTP: ");
-        if (scanf("%d", &otp) != 1 || !validatePositiveIntegerInput(otp)) {
-            printf("Invalid OTP. PIN change failed.\n");
-            return;
-        }
-
-        // Verify the OTP
-        // Add your OTP verification logic here
-        // ...
-
-        // Prompt for new PIN
-        printf("Enter your new PIN: ");
-        if (scanf("%d", &newPIN) != 1 || !validatePositiveIntegerInput(newPIN)) {
-            printf("Invalid PIN. PIN change failed.\n");
-            return;
-        }
-
-        // Update the PIN in the system if OTP verification succeeds
-        // Add your PIN update logic here
-        // ...
-
-        printf("PIN change successful. Thank you!\n");
     } else {
         printf("Invalid option. PIN change failed.\n");
     }
