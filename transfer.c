@@ -1,32 +1,23 @@
-//This code defines a function fundTransfer() that handles the process of transferring funds in an ATM system. 
-//It prompts the user to enter an amount to transfer, the recipient's account, and their PIN. If the amount is valid (positive) and
-// the PIN is entered correctly, it performs the fund transfer, updates the account balances (not implemented in the given code), 
-//and records the transaction in a file called "transactions.txt". Finally, it displays a success message.
-
 #include <stdio.h>
-#include <stdlib.h>
+#include "sub.h"
 
-void fundTransfer() {
+void fundTransfer(int *balance) {
     double amount;
     int pin;
     char recipient[50];
     FILE *file;
 
-    // Prompt for transfer amount
     printf("Enter the amount to transfer: ");
     scanf("%lf", &amount);
-
-    // Validate the amount (should be positive)
-    if (amount <= 0) {
+    // Validate the amount (should be positive and less than or equal to the account balance)
+    if (amount <= 0 || amount > *balance) {
         printf("Invalid amount. Transfer failed.\n");
         return;
     }
 
-    // Prompt for recipient account
     printf("Enter the recipient's account: ");
     scanf("%s", recipient);
 
-    // Prompt for PIN
     printf("Enter your PIN: ");
     if (scanf("%d", &pin) != 1) {
         printf("Invalid PIN. Transfer failed.\n");
@@ -34,7 +25,7 @@ void fundTransfer() {
     }
 
     // Perform the fund transfer and update account balances
-    // Add your logic here
+    *balance -= (int)amount;
 
     // Save the transaction to a file
     file = fopen("transactions.txt", "a");
@@ -47,4 +38,7 @@ void fundTransfer() {
     fclose(file);
 
     printf("Transfer successful. Thank you!\n");
+
+    // Display the updated account balance
+    printf("Your updated account balance is: Rs%d\n", *balance);
 }
