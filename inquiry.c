@@ -1,8 +1,7 @@
-//This code defines a function balanceInquiry() that retrieves and displays the current account balance
-
 #include <stdio.h>
-void balanceInquiry() {
-    // Fetch and display account balance
-    // Add your logic here
-    printf("Your current balance is: Rs1000\n");
+#include "sub.h"
+
+void balanceInquiry(int *total_balance) {
+    // Display the current account balance
+    printf("Your current balance is: Rs%d\n", *total_balance);
 }
